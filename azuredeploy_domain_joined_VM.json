@@ -45,6 +45,20 @@
         "description": "Password of the account on the domain"
       }
     },
+    "autoShutdownEnabled": {
+      "type": "string",
+      "defaultValue": "Disabled",
+      "metadata": {
+        "description": "Auto shutdown the VM. Params are Enabled or Disabled"
+      }
+    },
+    "autoShutdownTime": {
+      "type": "string",
+      "defaultValue": "19:00",
+      "metadata": {
+        "description": "The shutdown time of the VM"
+      }
+    },
     "ouPath": {
       "type": "string",
       "defaultValue": "",
