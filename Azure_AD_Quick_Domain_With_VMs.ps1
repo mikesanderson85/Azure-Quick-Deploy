@@ -40,7 +40,7 @@ $password = 'Password_001'
 $newDomainParams = @{     
    'Name' = $deploymentName # Deployment name     
    'ResourceGroupName' = $rgName     
-   'TemplateUri' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/azuredeploy_active_directory_new_domain.json'     
+   'TemplateUri' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/master/azuredeploy_active_directory_new_domain.json'     
    'adminUsername' = $adadmin    
    'domainName' = $domainName # The FQDN of the AD Domain created       
    'dnsPrefix' = $dcDNSPrefix # The DNS prefix for the public IP address used by the Load Balancer
@@ -90,7 +90,7 @@ If ((Test-AzureRmDnsAvailability -DomainQualifiedName $vmName -Location $locatio
  
 $newVMParams = @{
     'ResourceGroupName' = $rgName
-    'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/azuredeploy_domain_joined_VM.json'
+    'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/master/azuredeploy_domain_joined_VM.json'
     'existingVNETName' = 'adVNET'
     'existingSubnetName' = 'adSubnet'
     'dnsLabelPrefix' = $vmName
