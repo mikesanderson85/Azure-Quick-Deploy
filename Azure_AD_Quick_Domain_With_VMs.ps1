@@ -1,4 +1,4 @@
-﻿if (!$AzureAccount) {
+if (!$AzureAccount) {
 $AzureAccount = Login-AzureRmAccount
 }
  
@@ -11,7 +11,7 @@ $location = 'West Europe'
 
 #Other Info
 $deploymentName = 'magicmikead'
-$numberOfComputerstoCreate = 1
+$numberOfVMsToCreate = 1
 
 #AD/Domain Info
 $adadmin = 'adadmin'
@@ -40,7 +40,7 @@ $password = 'Password_001'
 $newDomainParams = @{     
    'Name' = $deploymentName # Deployment name     
    'ResourceGroupName' = $rgName     
-   'TemplateUri' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/azuredeploy_active_directory_new_domain.json'     
+   'TemplateUri' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/edit1/azuredeploy_active_directory_new_domain.json'     
    'adminUsername' = $adadmin    
    'domainName' = $domainName # The FQDN of the AD Domain created       
    'dnsPrefix' = $dcDNSPrefix # The DNS prefix for the public IP address used by the Load Balancer
@@ -76,9 +76,9 @@ try {
     throw 'An error occurred'
 }
 
-For ($i = 1;$i -le $numberOfComputerstoCreate;$i++){
+For ($i = 1;$i -le $numberOfVMsToCreate;$i++){
 
-$vmName = "MAGICMIKE$i"
+$vmName = "$vmName$i"
 
  
 # Check availability of DNS name
@@ -90,7 +90,7 @@ If ((Test-AzureRmDnsAvailability -DomainQualifiedName $vmName -Location $locatio
  
 $newVMParams = @{
     'ResourceGroupName' = $rgName
-    'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/azuredeploy_domain_joined_VM.json'
+    'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/edit1/azuredeploy_domain_joined_VM.json'
     'existingVNETName' = 'adVNET'
     'existingSubnetName' = 'adSubnet'
     'dnsLabelPrefix' = $vmName
