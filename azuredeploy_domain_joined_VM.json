@@ -239,7 +239,7 @@
                  "[concat('Microsoft.Compute/virtualMachines/', variables('publicIPName'))]"
              ],
              "properties": {
-                 "status": "[parameters('AutoShutdownEnabled')]",
+                 "status": "[parameters('autoShutdownEnabled')]",
                  "taskType": "ComputeVmShutdownTask",
                  "dailyRecurrence": {
                      "time": "[parameters('autoShutdownTime')]"
