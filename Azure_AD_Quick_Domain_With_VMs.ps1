@@ -23,11 +23,12 @@ $dcSize = 'Standard_A1'
 #VM Info
 $vmUser = 'azureuser'
 $vmPassword = 'Password_001'
-$vmName = 'magicmike' #VMs will be suffixed with a number
+$vmName = 'magicmike000' #VMs will be suffixed with a number
 $vmSize = 'Basic_A1'
+$autoShutdownTime = '18:30'
+if ($autoShutdownTime) {$autoShutdown = "Enabled"}
  
 # Create New Resource Group
- 
 try {     
     Get-AzureRmResourceGroup -Name $rgName -Location $location -ErrorAction Stop     
     Write-Host 'RG already exists... skipping' -foregroundcolor yellow -backgroundcolor red 
@@ -95,6 +96,8 @@ if ($numberOfVMsToCreate -gt 0){
         'existingSubnetName' = 'adSubnet'
         'dnsLabelPrefix' = $vmName
         'vmSize' = $vmsize
+        'autoShutdownEnabled' = $autoShutdown
+        'autoShutdownTime' = $autoShutdownTime
         'domainToJoin' = $domainName
         'domainUsername' = $adadmin
         'domainPassword' = convertto-securestring $domainPassword -asplaintext -force
