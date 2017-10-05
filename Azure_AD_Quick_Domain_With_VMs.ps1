@@ -4,9 +4,27 @@ $AzureAccount = Login-AzureRmAccount
  
 $subs = Get-AzureRmSubscription 
 Select-AzureRmSubscription -TenantId $subs[0].TenantId -SubscriptionId $subs[0].SubscriptionId
- 
+
+#Resoruce Group Info
 $rgName ='RG-MAGICMIKE' 
 $location = 'West Europe'
+
+#Other Info
+$deploymentName = 'magicmikead'
+$numberOfComputerstoCreate = 1
+
+#AD/Domain Info
+$adadmin = 'adadmin'
+$domainPassword = 'Password_001'
+$domainName = 'magicmike.com'
+$dcDNSPrefix = 'magicmikead'
+$dcSize = 'Standard_A1'
+
+#VM Info
+$vmUser = 'azureuser'
+$vmPassword = 'Password_001'
+$vmName = 'magicmike' #VMs will be suffixed with a number
+$vmSize = 'Basic_A1'
  
 # Create New Resource Group
  
@@ -20,13 +38,14 @@ try {
 $password = 'Password_001'
  
 $newDomainParams = @{     
-   'Name' = 'magicmikead' # Deployment name     
+   'Name' = $deploymentName # Deployment name     
    'ResourceGroupName' = $rgName     
-   'TemplateUri' = 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/active-directory-new-domain/azuredeploy.json'     
-   'adminUsername' = 'adadmin'     
-   'domainName' = 'ad.magicmike.com' # The FQDN of the AD Domain created       
-   'dnsPrefix' = 'magicmikead' # The DNS prefix for the public IP address used by the Load Balancer       
-   'adminPassword' = ConvertTo-SecureString $password -asplaintext -force
+   'TemplateUri' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/edit1/azuredeploy_active_directory_new_domain.json'     
+   'adminUsername' = $adadmin    
+   'domainName' = $domainName # The FQDN of the AD Domain created       
+   'dnsPrefix' = $dcDNSPrefix # The DNS prefix for the public IP address used by the Load Balancer
+   'adVMSize' = $dcsize       
+   'adminPassword' = ConvertTo-SecureString $domainPassword -asplaintext -force
 }
 New-AzureRmResourceGroupDeployment @newDomainParams
 
@@ -38,14 +57,13 @@ $rdpString = $rdpVM.DnsSettings.Fqdn + ':3389'
 Write-Host 'Connect to the VM using the URL below:' -foregroundcolor yellow -backgroundcolor red 
 Write-Host $rdpString
 
+if ($numberOfComputerstoCreate -gt 0){
 if (!$AzureAccount) {
 $AzureAccount = Login-AzureRmAccount
 }
 
 $subs = Get-AzureRmSubscription 
 Select-AzureRmSubscription -TenantId $subs[0].TenantId -SubscriptionId $subs[0].SubscriptionId
-
-$numberOfComputerstoCreate = 6
 
 # Create New Resource Group
 # Checks to see if RG exists
@@ -59,10 +77,7 @@ try {
 }
 
 For ($i = 1;$i -le $numberOfComputerstoCreate;$i++){
-$rgName ='RG-MAGICMIKE'
-$location = 'West Europe'
-$domainPassword = 'Password_001'
-$vmPassword = 'Password_001'
+
 $vmName = "MAGICMIKE$i"
 
  
@@ -75,17 +90,17 @@ If ((Test-AzureRmDnsAvailability -DomainQualifiedName $vmName -Location $locatio
  
 $newVMParams = @{
     'ResourceGroupName' = $rgName
-    'TemplateURI' = 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vm-domain-join/azuredeploy.json'
+    'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/edit1/azuredeploy_domain_joined_VM.json'
     'existingVNETName' = 'adVNET'
     'existingSubnetName' = 'adSubnet'
     'dnsLabelPrefix' = $vmName
-    'vmSize' = 'Basic_A1'
-    'domainToJoin' = 'ad.magicmike.com'
-    'domainUsername' = 'adadmin'
+    'vmSize' = $vmsize
+    'domainToJoin' = $domainName
+    'domainUsername' = $adadmin
     'domainPassword' = convertto-securestring $domainPassword -asplaintext -force
     'ouPath' = ''
     'domainJoinOptions' = 3
-    'vmAdminUsername' = 'azureuser'
+    'vmAdminUsername' = $vmUser
     'vmAdminPassword' = convertto-securestring $vmPassword -asplaintext -force
 }
 New-AzureRmResourceGroupDeployment @newVMParams
@@ -97,4 +112,7 @@ $rdpVM = Get-AzureRmVM -ResourceGroupName $rgName -Name $vmName
 $rdpString = $vmName + '.' + $rdpVM.Location + '.cloudapp.azure.com'
 Write-Host 'Connect to the VM using the URL below:' -foregroundcolor yellow -backgroundcolor red 
 Write-Host $rdpString
+}
+} else {
+Write-Host "No VM's will be created"
 }
