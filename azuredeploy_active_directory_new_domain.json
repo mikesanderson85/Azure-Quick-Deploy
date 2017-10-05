@@ -26,6 +26,12 @@
         "description": "The DNS prefix for the public IP address used by the Load Balancer"
       }
     },
+    "adVMSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the Azure AD VM"
+      }
+    },
     "_artifactsLocation": {
       "type": "string",
       "metadata": {
@@ -201,7 +207,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D2_v2"
+          "vmSize": "[parameters('adVMSize')]"
         },
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
