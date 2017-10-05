@@ -45,7 +45,21 @@
         "description": "Password of the account on the domain"
       }
     },
-    "ouPath": {
+    "AutoShutdownEnabled": {
+      "type": "string",
+      "defaultValue": "Disabled",
+      "metadata": {
+        "description": "Auto shutdown the VM. Params are Enabled or Disabled"
+      }
+    },
+    "autoShutdownTime": {
+      "type": "string",
+      "defaultValue": "19:00",
+      "metadata": {
+        "description": "The shutdown time of the VM"
+      }
+    },
+   "ouPath": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
@@ -191,6 +205,29 @@
         }
       }
     },
+    {
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "shutdown-computevm",
+            "apiVersion": "2016-05-15",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('publicIPName'))]"
+            ],
+            "properties": {
+                "status": "[parameters('AutoShutdownEnabled')]",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "W. Europe Standard Time",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 15,
+                    "webhookUrl": "http://sjkp.dk"
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',variables('publicIPName'))]"
+            }
+        },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
