@@ -206,29 +206,6 @@
       }
     },
     {
-            "type": "Microsoft.DevTestLab/schedules",
-            "name": "shutdown-computevm",
-            "apiVersion": "2016-05-15",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', variables('publicIPName'))]"
-            ],
-            "properties": {
-                "status": "[parameters('AutoShutdownEnabled')]",
-                "taskType": "ComputeVmShutdownTask",
-                "dailyRecurrence": {
-                    "time": "[parameters('autoShutdownTime')]"
-                },
-                "timeZoneId": "W. Europe Standard Time",
-                "notificationSettings": {
-                    "status": "Disabled",
-                    "timeInMinutes": 15,
-                    "webhookUrl": "http://sjkp.dk"
-                },
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',variables('publicIPName'))]"
-            }
-        },
-    {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('dnsLabelPrefix'),'/joindomain')]",
