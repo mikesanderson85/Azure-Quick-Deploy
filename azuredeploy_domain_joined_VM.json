@@ -45,7 +45,7 @@
         "description": "Password of the account on the domain"
       }
     },
-    "AutoShutdownEnabled": {
+    "autoShutdownEnabled": {
       "type": "string",
       "defaultValue": "Disabled",
       "metadata": {
