@@ -8,14 +8,14 @@ $numberOfVMsToCreate = 1 #numer of additional VMs to create
 
 #AD/Domain Info
 $adadmin = 'adadmin' #username for AD
-$domainPassword = 'Password_001' #password for AD
+$domainPassword = Read-Host -assecurestring "Please enter your password for AD" #password for AD
 $domainName = 'magicmike.com' #domain name
 $adDNSPrefix = 'magicmikead' #DNS prefix of AD server
 $dcSize = 'Standard_A1' #VM size
 
 #VM Info
 $vmUser = 'azureuser' #user for VM
-$vmPassword = 'Password_001' #password for VM
+$vmPassword = Read-Host -assecurestring "Please enter your password for VMs" #password for VM
 $vmName = 'magicmikexxx' #VMs will be suffixed with a number
 $vmSize = 'Basic_A1' #VM size for VM
 $autoShutdownTime = '1830' #leave blank to turn off auto shutdown
@@ -45,7 +45,7 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
        'domainName' = $domainName # The FQDN of the AD Domain created       
        'dnsPrefix' = $adDNSPrefix # The DNS prefix for the public IP address used by the Load Balancer
        'adVMSize' = $dcsize       
-       'adminPassword' = ConvertTo-SecureString $domainPassword -asplaintext -force
+       'adminPassword' = $domainPassword
     }
     New-AzureRmResourceGroupDeployment @newDomainParams
 
@@ -102,11 +102,11 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
                 'domainUsername' = $adadmin
                 'autoShutdownEnabled' = $autoShutdown
                 'autoShutdownTime' = $autoShutdownTime
-                'domainPassword' = convertto-securestring $domainPassword -asplaintext -force
+                'domainPassword' = $domainPassword
                 'ouPath' = ''
                 'domainJoinOptions' = 3
                 'vmAdminUsername' = $vmUser
-                'vmAdminPassword' = convertto-securestring $vmPassword -asplaintext -force
+                'vmAdminPassword' = $vmPassword
             }
             New-AzureRmResourceGroupDeployment @newVMParams
 
