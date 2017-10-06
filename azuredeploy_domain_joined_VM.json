@@ -120,6 +120,28 @@
       }
     },
     {
+      "apiVersion": "[providers('Microsoft.DevTestLab','labs').apiVersions[0]]",
+      "type": "microsoft.devtestlab/schedules",
+      "name": "[concat('shutdown-computevm-',variables('publicIPName'),copyIndex(parameters('numerationOfVMs')))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+      "[concat('Microsoft.Compute/virtualMachines/',concat(variables('publicIPName'),copyIndex(parameters('numerationOfVMs'))))]"
+      ],
+      "properties": {
+      "status": "[parameters('autoShutdownEnabled')]",
+      "taskType": "ComputeVmShutdownTask",
+      "dailyRecurrence": {
+      "time": "[parameters('autoShutdownTime')]"
+      },
+      "timeZoneId": "W. Europe Standard Time",
+      "notificationSettings": {
+      "status": "Disabled",
+      "timeInMinutes": 15
+      },
+      "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('vmName'),copyIndex(parameters('numerationOfVMs'))))]"
+      }
+      },
+    {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
