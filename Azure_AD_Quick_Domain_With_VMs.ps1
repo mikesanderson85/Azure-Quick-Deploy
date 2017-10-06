@@ -58,8 +58,9 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
     Write-Host $rdpString
 
 } else {
-
     Write-Host 'AD Name already exists. Skipping...' -foregroundcolor yellow -backgroundcolor red 
+}
+
         if ($numberOfVMsToCreate -gt 0){
             if (!$AzureAccount) {
             $AzureAccount = Login-AzureRmAccount
@@ -121,4 +122,3 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
         } else {
     Write-Host "No VM's will be created"
     }
-}
