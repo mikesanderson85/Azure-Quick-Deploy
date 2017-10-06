@@ -125,7 +125,7 @@
       "name": "[concat('shutdown-computevm-',variables('publicIPName'),copyIndex(parameters('numerationOfVMs')))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-      "[concat('Microsoft.Compute/virtualMachines/',concat(variables('publicIPName'),copyIndex(parameters('numerationOfVMs'))))]"
+      "[concat('Microsoft.Compute/virtualMachines/',concat(variables('publicIPName')))]"
       ],
       "properties": {
       "status": "[parameters('autoShutdownEnabled')]",
@@ -138,7 +138,7 @@
       "status": "Disabled",
       "timeInMinutes": 15
       },
-      "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('vmName'),copyIndex(parameters('numerationOfVMs'))))]"
+      "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(variables('publicIPName')))]"
       }
       },
     {
