@@ -56,7 +56,7 @@
     "adRDPNAT": "adRDP",
     "adNicName": "adNic",
     "adNicIPAddress": "10.0.0.4",
-    "adVMName": "adVM",
+    "adVMName": "[parameters('dnsPrefix')]",
     "adSubnetName": "adSubnet",
     "adSubnetAddressPrefix": "10.0.0.0/24",
     "publicIPAddressName": "adPublicIP",
