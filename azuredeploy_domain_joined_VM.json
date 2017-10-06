@@ -122,10 +122,10 @@
     {
       "apiVersion": "[providers('Microsoft.DevTestLab','labs').apiVersions[0]]",
       "type": "microsoft.devtestlab/schedules",
-      "name": "[concat('shutdown-computevm-',variables('publicIPName'))]",
+      "name": "[concat('shutdown-computevm-',[parameters('dnsLabelPrefix'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-      "[concat('Microsoft.Compute/virtualMachines/',concat(variables('publicIPName')))]"
+      "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('dnsLabelPrefix')))]"
       ],
       "properties": {
       "status": "[parameters('autoShutdownEnabled')]",
@@ -138,7 +138,7 @@
       "status": "Disabled",
       "timeInMinutes": 15
       },
-      "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(variables('publicIPName')))]"
+      "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('dnsLabelPrefix')))]"
       }
       },
     {
