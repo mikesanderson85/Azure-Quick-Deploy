@@ -4,7 +4,7 @@ $location = 'West Europe' #location of resource group
 
 #Other Info
 $deploymentName = 'magicmikead' #name of the deployment 
-$numberOfVMsToCreate = 1 #numer of additional VMs to create
+$numberOfVMsToCreate = 6 #number of additional VMs to create
 
 #AD/Domain Info
 $adadmin = 'adadmin' #username for AD
@@ -16,7 +16,7 @@ $dcSize = 'Standard_A1' #VM size
 #VM Info
 $vmUser = 'azureuser' #user for VM
 $vmPassword = Read-Host -assecurestring "Please enter your password for VMs" #password for VM
-$vmName = 'magicmikexxx' #VMs will be suffixed with a number
+$vmName = 'magicmike0' #VMs will be suffixed with a number
 $vmSize = 'Basic_A1' #VM size for VM
 $autoShutdownTime = '1830' #leave blank to turn off auto shutdown
 if ($autoShutdownTime) {$autoShutdown = 'Enabled'} else {$autoShutdown = 'Disabled'}
@@ -58,7 +58,7 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
     Write-Host $rdpString
 
 } else {
-    Write-Host 'AD Name already exists. Skipping...' -foregroundcolor yellow -backgroundcolor red 
+    Write-Host 'AD server name already exists. Skipping...' -foregroundcolor yellow -backgroundcolor red 
 }
 
         if ($numberOfVMsToCreate -gt 0){
@@ -77,19 +77,18 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
                 Get-AzureRmResourceGroup -Name $rgName -Location $location -ErrorAction Stop
             } catch {
                 Write-Host "Resource Group doesn't exist" -foregroundcolor yellow -backgroundcolor red
-                throw 'An error occurred'
+                exit
             }
 
             For ($i = 1;$i -le $numberOfVMsToCreate;$i++){
 
-            $vmName = "$vmName$i"
+            $vmNewName = "$vmName$i"
 
- 
             # Check availability of DNS name
  
-            If ((Test-AzureRmDnsAvailability -DomainQualifiedName $vmName -Location $location) -eq $false) {
-                    Write-Host 'The DNS label prefix for the VM is already in use' -foregroundcolor yellow -backgroundcolor red
-                    throw 'An error occurred'
+            If ((Test-AzureRmDnsAvailability -DomainQualifiedName $vmNewName -Location $location) -eq $false) {
+                    Write-Host "The DNS label prefix, $vmNewName for the VM is already in use" -foregroundcolor yellow -backgroundcolor red
+                    exit
             }
  
             $newVMParams = @{
@@ -97,7 +96,7 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
                 'TemplateURI' = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/master/azuredeploy_domain_joined_VM.json'
                 'existingVNETName' = 'adVNET'
                 'existingSubnetName' = 'adSubnet'
-                'dnsLabelPrefix' = $vmName
+                'dnsLabelPrefix' = $vmNewName
                 'vmSize' = $vmsize
                 'domainToJoin' = $domainName
                 'domainUsername' = $adadmin
@@ -113,12 +112,12 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
 
             # Display the RDP connection string
  
-            $rdpVM = Get-AzureRmVM -ResourceGroupName $rgName -Name $vmName
+            $rdpVM = Get-AzureRmVM -ResourceGroupName $rgName -Name $vmNewName
  
-            $rdpString = $vmName + '.' + $rdpVM.Location + '.cloudapp.azure.com'
+            $rdpString = $vmNewName + '.' + $rdpVM.Location + '.cloudapp.azure.com'
             Write-Host 'Connect to the VM using the URL below:' -foregroundcolor yellow -backgroundcolor red 
             Write-Host $rdpString
             }
         } else {
-    Write-Host "No VM's will be created"
-    }
+            Write-Host "No VM's will be created"
+            }
