@@ -17,6 +17,7 @@ $dcSize = 'Standard_A1' #VM size
 $vmUser = 'azureuser' #user for VM
 $vmPassword = Read-Host -assecurestring "Please enter your password for VMs" #password for VM
 $vmName = 'magicmike0' #VMs will be suffixed with a number
+$vmSuffixStartNumber = 3
 $vmSize = 'Basic_A1' #VM size for VM
 $autoShutdownTime = '1830' #leave blank to turn off auto shutdown
 if ($autoShutdownTime) {$autoShutdown = 'Enabled'} else {$autoShutdown = 'Disabled'}
@@ -80,7 +81,7 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
                 exit
             }
 
-            For ($i = 1;$i -le $numberOfVMsToCreate;$i++){
+            For ($i = $vmSuffixStartNumber;$i -le $numberOfVMsToCreate;$i++){
 
             $vmNewName = "$vmName$i"
 
