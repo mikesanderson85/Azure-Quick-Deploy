@@ -104,7 +104,7 @@ if (!(Get-AzureRmVM -Name $adDNSPrefix -ResourceGroupName $rgName -ErrorAction S
 	$newDomainParams = @{
 		'Name'				      = $deploymentName # Deployment name     
 		'ResourceGroupName'	      = $rgName
-		'TemplateUri'			  = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/master/azuredeploy_active_directory_new_domain.json'
+		'TemplateUri'			  = 'https://raw.githubusercontent.com/mikesanderson85/PS-Azure-Quick-Deploy/master/azuredeploy_active_directory_new_domain.json'
 		'adminUsername'		      = $adadmin
 		'domainName'			  = $domainName # The FQDN of the AD Domain created       
 		'dnsPrefix'			      = $adDNSPrefix # The DNS prefix for the public IP address used by the Load Balancer
@@ -153,7 +153,7 @@ if ($numberOfVMsToCreate -gt 0) {
 		
 		$newVMParams = @{
 			'ResourceGroupName'	       = $rgName
-			'TemplateURI'			   = 'https://raw.githubusercontent.com/mikesanderson85/Azure-Quick-Deploy/master/azuredeploy_domain_joined_VM.json'
+			'TemplateURI'			   = 'https://raw.githubusercontent.com/mikesanderson85/PS-Azure-Quick-Deploy/master/azuredeploy_domain_joined_VM.json'
 			'existingVNETName'		   = 'adVNET'
 			'existingSubnetName'	   = 'adSubnet'
 			'dnsLabelPrefix'		   = $vmNewName
