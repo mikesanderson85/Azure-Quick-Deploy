@@ -97,7 +97,7 @@
     "storageAccountName": "[concat(uniquestring(resourceGroup().id, deployment().name))]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
-    "windowsOSVersion": "[parameters('OSVersion')]"
+    "windowsOSVersion": "[parameters('OSVersion')]",
     "apiVersion": "2015-06-15",
     "nicName": "[concat(parameters('dnsLabelPrefix'),'Nic')]",
     "publicIPName": "[concat(parameters('dnsLabelPrefix'),'Pip')]",
